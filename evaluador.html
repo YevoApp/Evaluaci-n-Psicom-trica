@@ -411,13 +411,13 @@ tbody td{padding:12px 14px;vertical-align:middle}
           <div class="stat-card"><div class="stat-val" id="stat-total">0</div><div class="stat-label">Candidatos evaluados</div></div>
           <div class="stat-card accent"><div class="stat-val" id="stat-avg">—</div><div class="stat-label">Promedio IE</div></div>
           <div class="stat-card ok"><div class="stat-val" id="stat-aptos">0</div><div class="stat-label">Candidatos aptos</div></div>
-          <div class="stat-card warn"><div class="stat-val" id="stat-max">—</div><div class="stat-label">Puntaje más alto</div></div>
+          <div class="stat-card warn"><div class="stat-val" id="stat-pendientes">0</div><div class="stat-label">En espera</div></div>
         </div>
 
         <!-- Candidates table -->
         <div class="card">
           <div class="section-title">
-            <span>Candidatos evaluados</span>
+            <span>Candidatos</span>
             <input class="search-input" type="search" id="search-input" placeholder="Buscar por nombre…" oninput="filtrarTabla()">
           </div>
 
@@ -441,10 +441,10 @@ tbody td{padding:12px 14px;vertical-align:middle}
                     <th>Candidato</th>
                     <th>Puesto</th>
                     <th>Fecha</th>
-                    <th>Puntaje IE</th>
-                    <th>Nivel</th>
-                    <th>Clasificación</th>
-                    <th style="width:90px"></th>
+                    <th>Estado</th>
+                    <th>Puntaje</th>
+                    <th>Resultado</th>
+                    <th style="width:120px"></th>
                   </tr>
                 </thead>
                 <tbody id="tbody"></tbody>
@@ -574,6 +574,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
 // ─── CONSTANTES ───────────────────────────────────────────────────────────────
 
 const STORE_KEY    = 'psico_armstrong_resultados_v1';
+const LINKS_KEY    = 'psico_armstrong_links_v1';
 const PIN_KEY      = 'psico_armstrong_pin_v1';
 const SESSION_KEY  = 'psico_armstrong_session';
 
@@ -674,6 +675,17 @@ function guardarResultado(r) {
   guardarResultados(arr);
 }
 
+function cargarLinks() {
+  try { return JSON.parse(localStorage.getItem(LINKS_KEY) || '[]'); } catch(e) { return []; }
+}
+function guardarLinks(arr) { localStorage.setItem(LINKS_KEY, JSON.stringify(arr)); }
+function guardarLink(link) {
+  const arr = cargarLinks();
+  const idx = arr.findIndex(x => x.t === link.t);
+  if (idx >= 0) arr[idx] = link; else arr.push(link);
+  guardarLinks(arr);
+}
+
 // ─── PIN ──────────────────────────────────────────────────────────────────────
 
 async function hashStr(str) {
@@ -768,28 +780,28 @@ function volverDashboard() {
 // ─── DASHBOARD ────────────────────────────────────────────────────────────────
 
 function renderDashboard() {
-  const data = cargarResultados();
+  const resultados = cargarResultados();
+  const links      = cargarLinks();
+  const completados = new Set(resultados.map(r => r.t));
+  const pendientes  = links.filter(l => !completados.has(l.t));
 
   // Stats
-  document.getElementById('stat-total').textContent = data.length;
-  if (data.length > 0) {
-    const avg = Math.round(data.reduce((s, r) => s + r.total, 0) / data.length);
-    const max = Math.max(...data.map(r => r.total));
-    const aptos = data.filter(r => r.total >= 60).length;
-    document.getElementById('stat-avg').textContent  = avg + '%';
-    document.getElementById('stat-max').textContent  = max + '%';
+  document.getElementById('stat-total').textContent      = resultados.length;
+  document.getElementById('stat-pendientes').textContent = pendientes.length;
+  if (resultados.length > 0) {
+    const avg   = Math.round(resultados.reduce((s, r) => s + r.total, 0) / resultados.length);
+    const aptos = resultados.filter(r => r.total >= 60).length;
+    document.getElementById('stat-avg').textContent   = avg + '%';
     document.getElementById('stat-aptos').textContent = aptos;
   } else {
-    document.getElementById('stat-avg').textContent  = '—';
-    document.getElementById('stat-max').textContent  = '—';
+    document.getElementById('stat-avg').textContent   = '—';
     document.getElementById('stat-aptos').textContent = '0';
   }
 
-  // Table
-  const empty = document.getElementById('empty-state');
+  const empty          = document.getElementById('empty-state');
   const tableContainer = document.getElementById('table-container');
 
-  if (data.length === 0) {
+  if (resultados.length === 0 && links.length === 0) {
     empty.style.display = 'block';
     tableContainer.style.display = 'none';
     document.getElementById('compare-card').style.display = 'none';
@@ -799,30 +811,53 @@ function renderDashboard() {
 
   empty.style.display = 'none';
   tableContainer.style.display = 'block';
+  renderTabla(resultados, pendientes);
 
-  renderTabla(data);
-
-  // Comparison chart
-  if (data.length >= 2) {
+  if (resultados.length >= 2) {
     document.getElementById('compare-card').style.display = 'block';
-    renderComparacion(data);
+    renderComparacion(resultados);
   } else {
     document.getElementById('compare-card').style.display = 'none';
   }
 }
 
 function filtrarTabla() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const data = cargarResultados().filter(r => (r.n || '').toLowerCase().includes(q));
-  renderTabla(data);
+  const q          = document.getElementById('search-input').value.toLowerCase();
+  const resultados = cargarResultados().filter(r => (r.n || '').toLowerCase().includes(q));
+  const completados = new Set(cargarResultados().map(r => r.t));
+  const pendientes  = cargarLinks().filter(l => !completados.has(l.t) && (l.n || '').toLowerCase().includes(q));
+  renderTabla(resultados, pendientes);
 }
 
-function renderTabla(data) {
+function renderTabla(resultados, pendientes = []) {
   const tbody = document.getElementById('tbody');
   tbody.innerHTML = '';
-  data.slice().reverse().forEach(r => {
-    const interp = getInterpTotal(r.total);
-    const pillClass = r.total >= 75 ? 'pill-ok' : r.total >= 60 ? 'pill-warn' : 'pill-err';
+
+  // Pendientes primero
+  pendientes.slice().reverse().forEach(link => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <div class="td-name">${esc(link.n || 'Sin nombre')}</div>
+        <div class="td-sub">${esc(link.e || '')}</div>
+      </td>
+      <td>${esc(link.p || 'Evaluación de Competencias')}</td>
+      <td style="white-space:nowrap">${formatFecha(link.ts)}</td>
+      <td><span class="pill pill-muted">En espera</span></td>
+      <td style="color:var(--muted)">—</td>
+      <td style="color:var(--muted)">—</td>
+      <td style="text-align:right">
+        <button class="btn btn-secondary btn-sm" onclick="copiarLinkPorToken('${esc(link.t)}')">
+          <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Copiar link
+        </button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+
+  // Completados
+  resultados.slice().reverse().forEach(r => {
+    const interp     = getInterpTotal(r.total);
     const clasifClass = r.total >= 75 ? 'pill-ok' : r.total >= 60 ? 'pill-warn' : 'pill-err';
 
     const tr = document.createElement('tr');
@@ -833,13 +868,13 @@ function renderTabla(data) {
       </td>
       <td>${esc(r.p || 'Evaluación de Competencias')}</td>
       <td style="white-space:nowrap">${formatFecha(r.ts)}</td>
+      <td><span class="pill pill-ok">Completado</span></td>
       <td>
         <div class="score-inline">
           <div class="score-bar-bg"><div class="score-bar-fill" style="width:${r.total}%;background:${getScoreColor(r.total)}"></div></div>
           <div class="score-num" style="color:${getScoreColor(r.total)}">${r.total}%</div>
         </div>
       </td>
-      <td><span class="pill ${pillClass}">${interp.nivel}</span></td>
       <td><span class="pill ${clasifClass}">${interp.clasificacion}</span></td>
       <td style="text-align:right">
         <button class="btn btn-secondary btn-sm" onclick="verDetalle('${r.t}')">
@@ -1064,6 +1099,9 @@ function generarLink() {
   document.getElementById('generated-link-url').textContent = url;
   document.getElementById('generated-link-box').style.display = 'block';
   document.getElementById('generated-link-box')._url = url;
+
+  guardarLink({ t: token, n: nombre, e: email, p: puesto, url, ts: new Date().toISOString() });
+  renderDashboard();
 }
 
 function copiarLink() {
@@ -1072,6 +1110,14 @@ function copiarLink() {
   navigator.clipboard.writeText(url)
     .then(() => showToast('Link copiado al portapapeles'))
     .catch(() => { alert('Copia este link:\n\n' + url); });
+}
+
+function copiarLinkPorToken(token) {
+  const link = cargarLinks().find(l => l.t === token);
+  if (!link) return;
+  navigator.clipboard.writeText(link.url)
+    .then(() => showToast('Link copiado al portapapeles'))
+    .catch(() => { alert('Copia este link:\n\n' + link.url); });
 }
 
 
@@ -1145,6 +1191,15 @@ function tabDashboard() {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-dashboard').classList.add('active');
 }
+
+// ─── TIEMPO REAL ──────────────────────────────────────────────────────────────
+
+window.addEventListener('storage', e => {
+  if (e.key === STORE_KEY && haySession()) {
+    renderDashboard();
+    showToast('Nuevo resultado recibido');
+  }
+});
 
 // ─── ARRANQUE ─────────────────────────────────────────────────────────────────
 init();
