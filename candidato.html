@@ -454,16 +454,16 @@ function iniciarTest() {
 function enviarTest() {
   const respuestas = [];
   const faltantes = [];
-  const total = PREGUNTAS.length;
+  const numPreguntas = PREGUNTAS.length;
 
-  for (let i = 0; i < total; i++) {
+  for (let i = 0; i < numPreguntas; i++) {
     const sel = document.querySelector(`input[name="q${i}"]:checked`);
     if (!sel) faltantes.push(i);
     else respuestas.push(parseInt(sel.value));
   }
 
   // Marcar faltantes
-  for (let i = 0; i < total; i++) {
+  for (let i = 0; i < numPreguntas; i++) {
     document.getElementById(`qbox${i}`).classList.toggle('error', faltantes.includes(i));
   }
 
