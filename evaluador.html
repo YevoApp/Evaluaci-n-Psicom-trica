@@ -22,6 +22,7 @@
 body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
 .screen{display:none}
 .screen.active{display:block}
+.screen.active.layout{display:flex}
 svg.icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
 /* ── AUTH SCREENS ─────────────────────────────────────────────────────────── */
@@ -866,7 +867,6 @@ function renderTabla(data) {
   tbody.innerHTML = '';
   data.slice().reverse().forEach(r => {
     const interp = getInterpTotal(r.total);
-    const imp = r.d ? getInterpDim(r.d.impresion) : null;
     const pillClass = r.total >= 75 ? 'pill-ok' : r.total >= 60 ? 'pill-warn' : 'pill-err';
     const clasifClass = r.total >= 75 ? 'pill-ok' : r.total >= 60 ? 'pill-warn' : 'pill-err';
 
