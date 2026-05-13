@@ -431,14 +431,26 @@ tbody td{padding:12px 14px;vertical-align:middle}
           <div id="empty-state" class="empty-state">
             <div class="empty-icon">📋</div>
             <div class="empty-title">Aún no hay resultados</div>
-            <p class="empty-text">Genera un link y compártelo con los candidatos.<br>Cuando completen la prueba, importa su código aquí.</p>
-            <button class="btn btn-primary btn-lg" style="margin-top:20px" onclick="abrirModalLink()">
-              <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-              Generar primer link
-            </button>
+            <p class="empty-text">Genera un link, compártelo con el candidato y cuando termine<br>pega aquí el código que él te enviará.</p>
+            <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-lg" onclick="abrirModalLink()">
+                <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Generar link
+              </button>
+              <button class="btn btn-lg" style="background:#f0fdf4;color:#15803d;border:2px solid #86efac;font-size:14px" onclick="abrirModalImportar()">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Pegar código del candidato
+              </button>
+            </div>
           </div>
 
           <div id="table-container" style="display:none">
+            <div style="margin-bottom:16px">
+              <button class="btn btn-lg" style="background:#f0fdf4;color:#15803d;border:2px solid #86efac;font-size:14px" onclick="abrirModalImportar()">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Pegar código de candidato
+              </button>
+            </div>
             <div class="table-wrap">
               <table>
                 <thead>
