@@ -382,10 +382,6 @@ tbody td{padding:12px 14px;vertical-align:middle}
         <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
         Generar link
       </button>
-      <button class="nav-item" onclick="abrirModalImportar()">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Importar resultado
-      </button>
     </nav>
     <div class="sb-footer">
       <div class="sb-user" id="sb-user-label">Evaluador</div>
@@ -404,10 +400,6 @@ tbody td{padding:12px 14px;vertical-align:middle}
         <button class="btn btn-primary" onclick="abrirModalLink()">
           <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
           Generar link
-        </button>
-        <button class="btn btn-secondary" onclick="abrirModalImportar()">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Importar código
         </button>
       </div>
     </div>
@@ -432,26 +424,16 @@ tbody td{padding:12px 14px;vertical-align:middle}
           <div id="empty-state" class="empty-state">
             <div class="empty-icon">📋</div>
             <div class="empty-title">Aún no hay resultados</div>
-            <p class="empty-text">Genera un link, compártelo con el candidato y cuando termine<br>pega aquí el código que él te enviará.</p>
+            <p class="empty-text">Genera un link y compártelo con el candidato.<br>Al finalizar su evaluación, los resultados aparecerán aquí automáticamente.</p>
             <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap">
               <button class="btn btn-primary btn-lg" onclick="abrirModalLink()">
                 <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                 Generar link
               </button>
-              <button class="btn btn-lg" style="background:#f0fdf4;color:#15803d;border:2px solid #86efac;font-size:14px" onclick="abrirModalImportar()">
-                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                Pegar código del candidato
-              </button>
             </div>
           </div>
 
           <div id="table-container" style="display:none">
-            <div style="margin-bottom:16px">
-              <button class="btn btn-lg" style="background:#f0fdf4;color:#15803d;border:2px solid #86efac;font-size:14px" onclick="abrirModalImportar()">
-                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                Pegar código de candidato
-              </button>
-            </div>
             <div class="table-wrap">
               <table>
                 <thead>
@@ -585,32 +567,6 @@ tbody td{padding:12px 14px;vertical-align:middle}
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════════ -->
-<!-- MODAL: IMPORTAR RESULTADO                                      -->
-<!-- ══════════════════════════════════════════════════════════════ -->
-<div class="modal-overlay" id="modal-import">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-header">
-      <div class="modal-title">Importar resultado de candidato</div>
-      <button class="modal-close" onclick="cerrarModales()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px">
-      Pega el código de resultados que recibiste del candidato al finalizar su evaluación.
-    </p>
-    <div class="form-group">
-      <label class="form-label">Código de resultados</label>
-      <textarea class="form-textarea" id="import-code" placeholder="Pega aquí el código del candidato…"></textarea>
-      <div class="form-err" id="import-err"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="cerrarModales()">Cancelar</button>
-      <button class="btn btn-primary" onclick="importarResultado()">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Importar
-      </button>
-    </div>
-  </div>
-</div>
 
 <div class="toast" id="toast"></div>
 
@@ -1118,58 +1074,6 @@ function copiarLink() {
     .catch(() => { alert('Copia este link:\n\n' + url); });
 }
 
-// ─── IMPORTAR RESULTADO ───────────────────────────────────────────────────────
-
-function importarResultado() {
-  const raw = document.getElementById('import-code').value.trim();
-  const errEl = document.getElementById('import-err');
-  errEl.style.display = 'none';
-
-  if (!raw) { errEl.textContent = 'Pega el código del candidato.'; errEl.style.display = 'block'; return; }
-
-  let resultado;
-  try {
-    resultado = JSON.parse(decodeURIComponent(escape(atob(raw))));
-  } catch(e) {
-    errEl.textContent = 'Código inválido. Verifica que lo hayas copiado completo y sin espacios.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  if (!resultado.r || !Array.isArray(resultado.r) || resultado.r.length !== 20) {
-    errEl.textContent = 'El código no corresponde a una evaluación válida.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  // Recalcular scores del lado del evaluador (para garantizar integridad)
-  const DIMS_MAP = {
-    logro:      [0,1,2,3],
-    servicio:   [4,5,6],
-    influencia: [7,8,9],
-    directivo:  [10,11,12,13],
-    cognitivo:  [14,15,16],
-    personal:   [17,18,19],
-  };
-  const PESOS = { logro:.20, servicio:.15, influencia:.15, directivo:.25, cognitivo:.15, personal:.10 };
-
-  const d = {};
-  for (const [dim, indices] of Object.entries(DIMS_MAP)) {
-    const vals = indices.map(i => resultado.r[i]);
-    d[dim] = Math.round(vals.reduce((a,b)=>a+b,0) / (vals.length*5) * 100);
-  }
-  let total = 0;
-  for (const [dim, peso] of Object.entries(PESOS)) total += d[dim] * peso;
-  resultado.d     = d;
-  resultado.total = Math.round(total);
-
-  guardarResultado(resultado);
-
-  document.getElementById('import-code').value = '';
-  cerrarModales();
-  mostrarDashboard();
-  showToast(`Resultado de ${resultado.n || 'candidato'} importado correctamente`);
-}
 
 // ─── MODALES ──────────────────────────────────────────────────────────────────
 
@@ -1179,12 +1083,6 @@ function abrirModalLink() {
   document.getElementById('link-nombre').focus();
 }
 
-function abrirModalImportar() {
-  document.getElementById('modal-import').classList.add('open');
-  document.getElementById('import-err').style.display = 'none';
-  document.getElementById('import-code').value = '';
-  setTimeout(() => document.getElementById('import-code').focus(), 100);
-}
 
 function cerrarModales() {
   document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));

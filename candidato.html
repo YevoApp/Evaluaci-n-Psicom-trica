@@ -264,26 +264,11 @@ strong{font-weight:700}
     </div>
     <div class="done-title">¡Muchas gracias!</div>
     <p class="done-text">
-      Tu evaluación de Competencias (Modelo Armstrong) ha sido completada exitosamente.<br>
-      Para que el evaluador pueda revisar tus resultados, <strong>copia el código que aparece a continuación y envíalo al responsable del proceso</strong> (vía correo electrónico, WhatsApp u otro medio).
+      Tu evaluación de Competencias (Modelo Armstrong) ha sido completada y registrada exitosamente.<br>
+      El evaluador responsable del proceso ya puede revisar tus resultados.
     </p>
-
-    <div class="code-box">
-      <div class="code-box-label">
-        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Código de resultados — Copiar y enviar al evaluador
-      </div>
-      <div class="code-val" id="result-code">Generando…</div>
-      <div class="code-actions">
-        <button class="btn btn-secondary btn-sm" onclick="copiarCodigo()">
-          <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Copiar código
-        </button>
-      </div>
-    </div>
-
     <div class="note-box">
-      <strong>Nota de privacidad:</strong> Este código contiene únicamente tus respuestas de manera cifrada. La interpretación y los resultados de la evaluación son confidenciales y solo estarán disponibles para el evaluador del proceso de selección.
+      <strong>Nota de privacidad:</strong> Tus respuestas son confidenciales. Los resultados estarán disponibles únicamente para el evaluador responsable de este proceso de selección.
     </div>
   </div>
 </div>
@@ -504,34 +489,18 @@ function enviarTest() {
     total,
   };
 
-  // Generar código base64
-  const code = btoa(unescape(encodeURIComponent(JSON.stringify(resultado))));
-  document.getElementById('result-code').textContent = code;
+  // Guardar directo en localStorage (misma clave que usa evaluador.html)
+  try {
+    const STORE_KEY = 'psico_armstrong_resultados_v1';
+    const arr = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+    const idx = arr.findIndex(x => x.t === resultado.t);
+    if (idx >= 0) arr[idx] = resultado; else arr.push(resultado);
+    localStorage.setItem(STORE_KEY, JSON.stringify(arr));
+  } catch(e) {}
+
   showScreen('s-done');
 }
 
-// ─── COPIAR CÓDIGO ────────────────────────────────────────────────────────────
-
-function copiarCodigo() {
-  const code = document.getElementById('result-code').textContent;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(code)
-      .then(() => showToast('Código copiado al portapapeles'))
-      .catch(() => seleccionarCodigo());
-  } else {
-    seleccionarCodigo();
-  }
-}
-
-function seleccionarCodigo() {
-  const el = document.getElementById('result-code');
-  const sel = window.getSelection();
-  const range = document.createRange();
-  range.selectNodeContents(el);
-  sel.removeAllRanges();
-  sel.addRange(range);
-  showToast('Selecciona el texto y cópialo (Ctrl+C)');
-}
 
 // ─── TOAST ────────────────────────────────────────────────────────────────────
 
