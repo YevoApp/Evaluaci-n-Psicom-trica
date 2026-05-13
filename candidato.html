@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Evaluación de Inteligencia Emocional — Supervisor IT</title>
+<title>Evaluación de Competencias — Modelo Armstrong</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -181,14 +181,14 @@ strong{font-weight:700}
     <div class="eval-logo">
       <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
     </div>
-    <div class="eval-title">Evaluación de Inteligencia Emocional</div>
-    <div class="eval-subtitle" id="intro-subtitle">Proceso de selección — Supervisor IT</div>
+    <div class="eval-title">Evaluación de Competencias</div>
+    <div class="eval-subtitle" id="intro-subtitle">Proceso de selección — Evaluación Armstrong</div>
   </div>
 
   <div class="card">
     <div class="card-title">Bienvenido/a, <span id="bienvenida-nombre" style="color:var(--accent)">candidato/a</span></div>
-    <p class="card-text">Has sido invitado/a a completar una evaluación psicométrica de <strong>Inteligencia Emocional (modelo Bar-On)</strong> como parte del proceso de selección para el puesto de <strong id="bienvenida-puesto">Supervisor IT</strong>.</p>
-    <p class="card-text">Esta evaluación mide diferentes componentes de tu inteligencia emocional en el contexto laboral. No hay respuestas correctas ni incorrectas; responde con sinceridad y con base en tu comportamiento habitual.</p>
+    <p class="card-text">Has sido invitado/a a completar una evaluación psicométrica de <strong>Competencias Conductuales (modelo Armstrong)</strong> como parte del proceso de selección para el puesto de <strong id="bienvenida-puesto">Evaluación de Competencias</strong>.</p>
+    <p class="card-text">Esta evaluación mide seis competencias conductuales clave en el contexto laboral. No hay respuestas correctas ni incorrectas; responde con sinceridad y con base en tu comportamiento habitual.</p>
 
     <div class="info-grid">
       <div class="info-item">
@@ -225,14 +225,14 @@ strong{font-weight:700}
 <!-- ══════════════════════════════════════════════════════════════ -->
 <div id="s-test" class="screen">
   <div class="eval-header">
-    <div class="eval-title" style="font-size:18px">Evaluación de Inteligencia Emocional</div>
-    <div class="eval-subtitle" id="test-subtitle">Supervisor IT</div>
+    <div class="eval-title" style="font-size:18px">Evaluación de Competencias — Modelo Armstrong</div>
+    <div class="eval-subtitle" id="test-subtitle">Evaluación de Competencias</div>
   </div>
 
   <div class="card progress-wrap" style="margin-bottom:16px">
     <div class="progress-info">
       <span>Progreso</span>
-      <span><span id="prog-count">0</span> / 20 respondidas <span class="progress-pct" id="prog-pct">(0%)</span></span>
+      <span><span id="prog-count">0</span> / <span id="prog-total">20</span> respondidas <span class="progress-pct" id="prog-pct">(0%)</span></span>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
   </div>
@@ -264,7 +264,7 @@ strong{font-weight:700}
     </div>
     <div class="done-title">¡Muchas gracias!</div>
     <p class="done-text">
-      Tu evaluación de Inteligencia Emocional ha sido completada exitosamente.<br>
+      Tu evaluación de Competencias (Modelo Armstrong) ha sido completada exitosamente.<br>
       Para que el evaluador pueda revisar tus resultados, <strong>copia el código que aparece a continuación y envíalo al responsable del proceso</strong> (vía correo electrónico, WhatsApp u otro medio).
     </p>
 
@@ -294,41 +294,41 @@ strong{font-weight:700}
 // ─── DATOS DE LA EVALUACIÓN ──────────────────────────────────────────────────
 
 const PREGUNTAS = [
-  // A — Gestión de servicios tecnológicos (Soporte técnico)
-  { sec:'A', txt:'Cuando un usuario reporta un incidente crítico, establezco prioridades claras y coordino su resolución de manera estructurada y eficiente.' },
-  { sec:'A', txt:'Documento los incidentes técnicos y sus soluciones para construir una base de conocimiento que mejore la respuesta futura del equipo.' },
-  { sec:'A', txt:'Me aseguro de que los servicios de TI bajo mi responsabilidad cumplan con los niveles de servicio acordados (SLAs) con las áreas usuarias.' },
-  { sec:'A', txt:'Superviso activamente la calidad del soporte técnico que brinda mi equipo, identificando oportunidades de mejora en los procesos y herramientas.' },
-  // B — Orientación al usuario (Atención al cliente)
-  { sec:'B', txt:'Gestiono las expectativas de los usuarios internos de forma proactiva, comunicando tiempos de respuesta y actualizaciones de estado.' },
-  { sec:'B', txt:'Doy seguimiento a la satisfacción de los usuarios tras la resolución de incidentes, verificando que sus necesidades fueron atendidas correctamente.' },
-  // C — Análisis y toma de decisiones (Resolución de problemas)
-  { sec:'C', txt:'Analizo la causa raíz de los problemas técnicos recurrentes antes de implementar soluciones, evitando parches temporales.' },
-  { sec:'C', txt:'Cuando enfrento un problema técnico complejo, desgloso el problema en componentes manejables y abordo cada uno de forma sistemática.' },
-  { sec:'C', txt:'Evalúo múltiples alternativas de solución considerando costo, tiempo, riesgo e impacto antes de tomar una decisión.' },
-  { sec:'C', txt:'Aplico métodos estructurados (análisis de causa raíz, 5 Porqués, árbol de fallas) para resolver problemas técnicos o de gestión del área.' },
-  // D — Respuesta ante la presión (Trabajo bajo presión)
-  { sec:'D', txt:'Durante incidentes mayores o cortes de servicio, mantengo la claridad mental y tomo decisiones efectivas sin perder el control de la situación.' },
-  { sec:'D', txt:'Cuando múltiples urgencias se presentan simultáneamente, establezco prioridades con criterio y comunico el plan de acción a mi equipo.' },
-  { sec:'D', txt:'Después de periodos de alta carga de trabajo, recupero mi rendimiento y el de mi equipo de manera rápida y efectiva.' },
-  // E — Liderazgo y desarrollo de equipo (Manejo de personal)
-  { sec:'E', txt:'Asigno tareas y proyectos a los miembros del equipo considerando sus habilidades, carga de trabajo y oportunidades de desarrollo.' },
-  { sec:'E', txt:'Doy retroalimentación constructiva y oportuna a mi equipo, tanto cuando su desempeño no cumple las expectativas como cuando destacan.' },
-  { sec:'E', txt:'Resuelvo conflictos entre miembros del equipo de forma justa, escuchando todas las partes y buscando soluciones que fortalezcan la cohesión.' },
-  { sec:'E', txt:'Identifico las necesidades de capacitación de mi equipo y creo activamente oportunidades de crecimiento profesional para cada integrante.' },
-  { sec:'E', txt:'En momentos de alta presión o cambio organizacional, mantengo al equipo motivado y enfocado en los objetivos sin descuidar el bienestar.' },
-  // F — Habilidades emocionales e interpersonales (Inteligencia emocional)
-  { sec:'F', txt:'Reconozco el impacto que mis emociones y actitudes tienen en el clima del equipo y ajusto mi comportamiento cuando la situación lo requiere.' },
-  { sec:'F', txt:'Manejo con madurez y equilibrio las críticas, los conflictos y las situaciones de alta tensión en el entorno laboral.' },
+  // A — Logro y Acción
+  { sec:'A', txt:'Me fijo metas desafiantes y trabajo de forma persistente para alcanzarlas, incluso cuando encuentro obstáculos en el camino.' },
+  { sec:'A', txt:'Busco activamente oportunidades de mejora en los procesos y resultados de mi trabajo, sin esperar a que me lo soliciten.' },
+  { sec:'A', txt:'Cuando inicio una tarea, la llevo a término con la calidad requerida, prestando atención a los detalles importantes.' },
+  { sec:'A', txt:'Tomo la iniciativa para resolver situaciones problemáticas antes de que escalen o afecten a otras personas o áreas.' },
+  // B — Ayuda y Servicio
+  { sec:'B', txt:'Identifico con facilidad las necesidades y expectativas de las personas con quienes colaboro o que dependen de mi trabajo.' },
+  { sec:'B', txt:'Me esfuerzo por comprender la perspectiva de los demás antes de emitir juicios o tomar decisiones que los afectan.' },
+  { sec:'B', txt:'Adapto mi comunicación y forma de trabajar según las necesidades particulares de cada persona o situación.' },
+  // C — Impacto e Influencia
+  { sec:'C', txt:'Soy capaz de persuadir a otros sobre mis ideas o propuestas utilizando argumentos sólidos adaptados a mi interlocutor.' },
+  { sec:'C', txt:'Construyo relaciones de confianza y colaboración tanto dentro de mi equipo como con personas de otras áreas.' },
+  { sec:'C', txt:'Anticipo cómo mis decisiones o acciones pueden afectar a otras personas, áreas o procesos de la organización.' },
+  // D — Competencias Directivas
+  { sec:'D', txt:'Distribuyo responsabilidades entre los integrantes de mi equipo considerando sus fortalezas y oportunidades de desarrollo.' },
+  { sec:'D', txt:'Brindo orientación y retroalimentación oportuna a quienes superviso, ayudándoles a mejorar su desempeño de forma sostenida.' },
+  { sec:'D', txt:'Genero un ambiente de trabajo donde las personas se sienten motivadas, escuchadas y comprometidas con los objetivos del equipo.' },
+  { sec:'D', txt:'Resuelvo los conflictos que surgen al interior del equipo con imparcialidad y buscando soluciones que beneficien a todas las partes.' },
+  // E — Competencias Cognitivas
+  { sec:'E', txt:'Analizo situaciones complejas descomponiéndolas en partes manejables para identificar la causa raíz del problema.' },
+  { sec:'E', txt:'Cuando enfrento un problema, evalúo múltiples alternativas antes de decidir, considerando ventajas, riesgos e impacto.' },
+  { sec:'E', txt:'Integro información de distintas fuentes para construir una visión global de los problemas o proyectos que debo gestionar.' },
+  // F — Efectividad Personal
+  { sec:'F', txt:'Mantengo la calma y tomo decisiones efectivas incluso en situaciones de alta presión, incertidumbre o cambio.' },
+  { sec:'F', txt:'Reconozco mis fortalezas y áreas de mejora, y trabajo activamente en mi desarrollo profesional y personal.' },
+  { sec:'F', txt:'Adapto mi comportamiento y enfoque cuando las circunstancias cambian, sin perder de vista los objetivos establecidos.' },
 ];
 
 const SECCIONES = {
-  A: 'Gestión de servicios tecnológicos',
-  B: 'Orientación al usuario',
-  C: 'Análisis y toma de decisiones',
-  D: 'Respuesta ante la presión',
-  E: 'Liderazgo y desarrollo de equipo',
-  F: 'Habilidades emocionales e interpersonales',
+  A: 'Logro y Acción',
+  B: 'Ayuda y Servicio',
+  C: 'Impacto e Influencia',
+  D: 'Competencias Directivas',
+  E: 'Competencias Cognitivas',
+  F: 'Efectividad Personal',
 };
 
 const ESCALA = [
@@ -340,27 +340,27 @@ const ESCALA = [
 ];
 
 const DIMS_MAP = {
-  soporte:   [0,1,2,3],
-  atencion:  [4,5],
-  resolucion:[6,7,8,9],
-  presion:   [10,11,12],
-  personal:  [13,14,15,16,17],
-  emocional: [18,19],
+  logro:     [0,1,2,3],
+  servicio:  [4,5,6],
+  influencia:[7,8,9],
+  directivo: [10,11,12,13],
+  cognitivo: [14,15,16],
+  personal:  [17,18,19],
 };
 
 const PESOS = {
-  soporte:    .20,
-  atencion:   .10,
-  resolucion: .20,
-  presion:    .15,
-  personal:   .25,
-  emocional:  .10,
+  logro:     .20,
+  servicio:  .15,
+  influencia:.15,
+  directivo: .25,
+  cognitivo: .15,
+  personal:  .10,
 };
 
 // ─── PARÁMETROS DE URL ───────────────────────────────────────────────────────
 
 const QS = new URLSearchParams(location.search);
-let cNombre = '', cEmail = '', cToken = '', cPuesto = 'Supervisor IT';
+let cNombre = '', cEmail = '', cToken = '', cPuesto = 'Evaluación de Competencias';
 
 try { cNombre = QS.get('n') ? atob(decodeURIComponent(QS.get('n'))) : ''; } catch(e){}
 try { cEmail  = QS.get('e') ? atob(decodeURIComponent(QS.get('e'))) : ''; } catch(e){}
@@ -406,7 +406,7 @@ function buildQuestions() {
     qDiv.className = 'question';
     qDiv.id = `qbox${idx}`;
     qDiv.innerHTML = `
-      <div class="q-num">Pregunta ${idx + 1} de 20</div>
+      <div class="q-num">Pregunta ${idx + 1} de ${PREGUNTAS.length}</div>
       <div class="q-text">${q.txt}</div>
       <div class="likert">${likertHtml}</div>`;
 
@@ -425,11 +425,13 @@ function buildQuestions() {
 
 function updateProgress() {
   let answered = 0;
-  for (let i = 0; i < 20; i++) {
+  const total = PREGUNTAS.length;
+  for (let i = 0; i < total; i++) {
     if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
   }
-  const pct = Math.round(answered / 20 * 100);
+  const pct = Math.round(answered / total * 100);
   document.getElementById('prog-count').textContent = answered;
+  document.getElementById('prog-total').textContent = total;
   document.getElementById('prog-pct').textContent   = `(${pct}%)`;
   document.getElementById('prog-fill').style.width  = pct + '%';
 }
@@ -452,15 +454,16 @@ function iniciarTest() {
 function enviarTest() {
   const respuestas = [];
   const faltantes = [];
+  const total = PREGUNTAS.length;
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < total; i++) {
     const sel = document.querySelector(`input[name="q${i}"]:checked`);
     if (!sel) faltantes.push(i);
     else respuestas.push(parseInt(sel.value));
   }
 
   // Marcar faltantes
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < total; i++) {
     document.getElementById(`qbox${i}`).classList.toggle('error', faltantes.includes(i));
   }
 

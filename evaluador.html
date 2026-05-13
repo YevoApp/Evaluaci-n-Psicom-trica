@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Panel del Evaluador — IE Supervisor IT</title>
+<title>Panel del Evaluador — Modelo Armstrong</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -349,7 +349,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
         <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
       <div class="auth-title">Panel del Evaluador</div>
-      <div class="auth-sub">Ingresa tu PIN para acceder a los resultados de la evaluación IE — Supervisor IT.</div>
+      <div class="auth-sub">Ingresa tu PIN para acceder a los resultados de la Evaluación de Competencias — Modelo Armstrong.</div>
       <label class="auth-label">PIN de acceso</label>
       <input class="auth-input" type="password" id="login-pin" inputmode="numeric" maxlength="8" placeholder="••••" autocomplete="current-password">
       <div class="auth-err" id="login-err"></div>
@@ -369,7 +369,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
       <div class="sb-brand-icon">
         <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
       </div>
-      <span>IE Evaluador</span>
+      <span>Armstrong Evaluador</span>
     </div>
     <nav class="sb-nav">
       <div class="sb-section">Principal</div>
@@ -399,7 +399,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
   <!-- Topbar -->
   <div style="flex:1">
     <div class="topbar">
-      <div class="topbar-title">Dashboard — Evaluación IE Supervisor IT</div>
+      <div class="topbar-title">Dashboard — Evaluación de Competencias Armstrong</div>
       <div class="topbar-actions">
         <button class="btn btn-primary" onclick="abrirModalLink()">
           <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
@@ -492,7 +492,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
       <div class="sb-brand-icon">
         <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
       </div>
-      <span>IE Evaluador</span>
+      <span>Armstrong Evaluador</span>
     </div>
     <nav class="sb-nav">
       <div class="sb-section">Principal</div>
@@ -563,7 +563,7 @@ tbody td{padding:12px 14px;vertical-align:middle}
     </div>
     <div class="form-group">
       <label class="form-label">Puesto al que aplica</label>
-      <input class="form-input" type="text" id="link-puesto" value="Supervisor IT">
+      <input class="form-input" type="text" id="link-puesto" value="Evaluación de Competencias">
     </div>
     <div class="generated-link" id="generated-link-box">
       <div class="generated-link-label">Link generado — Copiar y enviar al candidato</div>
@@ -617,55 +617,54 @@ tbody td{padding:12px 14px;vertical-align:middle}
 <script>
 // ─── CONSTANTES ───────────────────────────────────────────────────────────────
 
-const STORE_KEY    = 'psico_ie_resultados_v1';
-const PIN_KEY      = 'psico_ie_pin_v1';
-const SESSION_KEY  = 'psico_ie_session';
+const STORE_KEY    = 'psico_armstrong_resultados_v1';
+const PIN_KEY      = 'psico_armstrong_pin_v1';
+const SESSION_KEY  = 'psico_armstrong_session';
 
 const DIMS_CONFIG = [
-  { key:'soporte',    label:'Soporte Técnico',         color:'#7c3aed', peso:20, nivelEsperado:'Alto (75–89%)',         desc:'Gestión de incidentes, SLAs, calidad del servicio y mejora continua del área TI.' },
-  { key:'atencion',   label:'Atención al Cliente',     color:'#0891b2', peso:10, nivelEsperado:'Adecuado (60–74%)',     desc:'Gestión proactiva de expectativas de usuarios internos y seguimiento de satisfacción.' },
-  { key:'resolucion', label:'Resolución de Problemas', color:'#059669', peso:20, nivelEsperado:'Alto (75–89%)',         desc:'Análisis de causa raíz, pensamiento sistemático y evaluación de alternativas.' },
-  { key:'presion',    label:'Trabajo bajo Presión',    color:'#dc2626', peso:15, nivelEsperado:'Alto (75–89%)',         desc:'Efectividad en incidentes críticos, priorización bajo urgencia y recuperación del equipo.' },
-  { key:'personal',   label:'Manejo de Personal',      color:'#d97706', peso:25, nivelEsperado:'Sobresaliente (≥90%)', desc:'Asignación de tareas, retroalimentación, resolución de conflictos y desarrollo del equipo.' },
-  { key:'emocional',  label:'Inteligencia Emocional',  color:'#2563eb', peso:10, nivelEsperado:'Adecuado (60–74%)',    desc:'Autoconciencia, manejo de las propias emociones y equilibrio interpersonal bajo tensión.' },
+  { key:'logro',      label:'Logro y Acción',           color:'#7c3aed', peso:20, nivelEsperado:'Alto (75–89%)',         desc:'Orientación al logro, mejora continua, calidad en la ejecución e iniciativa ante problemas.' },
+  { key:'servicio',   label:'Ayuda y Servicio',          color:'#0891b2', peso:15, nivelEsperado:'Adecuado (60–74%)',     desc:'Comprensión de necesidades, empatía y adaptación al estilo de cada persona o situación.' },
+  { key:'influencia', label:'Impacto e Influencia',      color:'#059669', peso:15, nivelEsperado:'Adecuado (60–74%)',     desc:'Persuasión, construcción de relaciones de confianza y conciencia del impacto organizacional.' },
+  { key:'directivo',  label:'Competencias Directivas',   color:'#dc2626', peso:25, nivelEsperado:'Alto (75–89%)',         desc:'Delegación, retroalimentación, motivación del equipo y resolución de conflictos.' },
+  { key:'cognitivo',  label:'Competencias Cognitivas',   color:'#d97706', peso:15, nivelEsperado:'Alto (75–89%)',         desc:'Análisis de causa raíz, evaluación de alternativas y síntesis de información compleja.' },
+  { key:'personal',   label:'Efectividad Personal',      color:'#2563eb', peso:10, nivelEsperado:'Adecuado (60–74%)',     desc:'Manejo de la presión, autoconocimiento y adaptabilidad ante el cambio.' },
 ];
 
 // ─── INTERPRETACIONES ─────────────────────────────────────────────────────────
 
 const INTERP_DIM = {
-  soporte: [
-    { min:90, nivel:'Sobresaliente', txt:'Gestión de servicios TI excepcional. Anticipa incidentes, garantiza SLAs y lidera la mejora continua del soporte técnico con alto impacto organizacional.' },
-    { min:75, nivel:'Alto',          txt:'Sólida gestión técnica y operativa. Coordina incidentes con eficiencia, documenta soluciones y supervisa la calidad del servicio de forma consistente. <em>Cumple el nivel esperado para el puesto.</em>' },
-    { min:60, nivel:'Adecuado',      txt:'Gestión funcional del soporte técnico con oportunidades de mejora en la supervisión proactiva de SLAs y la construcción de bases de conocimiento.' },
-    { min:0,  nivel:'En desarrollo', txt:'Requiere fortalecer la gestión estructurada de incidentes, el cumplimiento de SLAs y la supervisión de la calidad del servicio técnico.' },
+  logro: [
+    { min:90, nivel:'Sobresaliente', txt:'Orientación al logro excepcional. Establece metas retadoras, actúa con iniciativa permanente y entrega resultados de alta calidad de forma consistente.' },
+    { min:75, nivel:'Alto',          txt:'Sólida capacidad de logro. Se fija metas relevantes, busca la mejora continua y ejecuta con calidad sin necesidad de supervisión directa. <em>Cumple el nivel esperado para el puesto.</em>' },
+    { min:60, nivel:'Adecuado',      txt:'Orientación al logro funcional con margen de mejora en la iniciativa proactiva y la búsqueda sistemática de mejoras en su área de trabajo.' },
+    { min:0,  nivel:'En desarrollo', txt:'Requiere fortalecer la orientación a resultados, la iniciativa y el compromiso con la calidad en la ejecución de sus tareas.' },
   ],
-  atencion: [
-    { min:90, nivel:'Sobresaliente', txt:'Gestión excepcional de la experiencia del usuario interno. Supera consistentemente las expectativas en comunicación proactiva y seguimiento post-servicio.' },
-    { min:60, nivel:'Adecuado',      txt:'Gestión adecuada de las expectativas del usuario. Comunica actualizaciones y da seguimiento a la satisfacción de forma suficiente. <em>Cumple el nivel esperado para el puesto.</em>' },
-    { min:0,  nivel:'En desarrollo', txt:'Necesita desarrollar mayor orientación al usuario interno: comunicación proactiva de estados y seguimiento sistemático de satisfacción tras cada servicio.' },
+  servicio: [
+    { min:90, nivel:'Sobresaliente', txt:'Excepcional capacidad de empatía e identificación de necesidades. Adapta constantemente su enfoque a las personas, generando relaciones de alto valor.' },
+    { min:60, nivel:'Adecuado',      txt:'Adecuada comprensión de las necesidades de los demás. Adapta su comunicación y actúa con empatía en la mayoría de situaciones. <em>Cumple el nivel esperado para el puesto.</em>' },
+    { min:0,  nivel:'En desarrollo', txt:'Necesita desarrollar mayor capacidad empática, escucha activa y adaptación al estilo y necesidades de los distintos interlocutores.' },
   ],
-  resolucion: [
-    { min:90, nivel:'Sobresaliente', txt:'Capacidad analítica excepcional. Resuelve problemas complejos de raíz con métodos estructurados, anticipa fallas y genera soluciones de alto impacto.' },
-    { min:75, nivel:'Alto',          txt:'Sólidas habilidades analíticas y de resolución. Aplica metodologías estructuradas, evalúa alternativas con criterio y evita parches temporales. <em>Cumple el nivel esperado para el puesto.</em>' },
-    { min:60, nivel:'Adecuado',      txt:'Resolución de problemas funcional con margen de mejora en el uso de metodologías formales (causa raíz, 5 Porqués) para problemas complejos o recurrentes.' },
-    { min:0,  nivel:'En desarrollo', txt:'Requiere fortalecer el pensamiento analítico sistemático y el uso de herramientas estructuradas de resolución de problemas técnicos y de gestión.' },
+  influencia: [
+    { min:90, nivel:'Sobresaliente', txt:'Alta capacidad de influencia y construcción de redes. Genera confianza de forma natural y logra alinear a otros con sus ideas con gran efectividad.' },
+    { min:60, nivel:'Adecuado',      txt:'Influencia adecuada para el puesto. Construye relaciones de colaboración y comunica sus propuestas con convicción suficiente. <em>Cumple el nivel esperado para el puesto.</em>' },
+    { min:0,  nivel:'En desarrollo', txt:'Requiere desarrollar habilidades de persuasión, construcción de alianzas y conciencia del impacto organizacional de sus decisiones.' },
   ],
-  presion: [
-    { min:90, nivel:'Sobresaliente', txt:'Rendimiento excepcional bajo presión. Mantiene la calma absoluta en incidentes críticos, prioriza con precisión y acelera la recuperación del equipo.' },
-    { min:75, nivel:'Alto',          txt:'Alta efectividad en situaciones de presión. Toma decisiones claras en incidentes mayores, comunica el plan de acción y gestiona bien múltiples urgencias. <em>Cumple el nivel esperado para el puesto.</em>' },
-    { min:60, nivel:'Adecuado',      txt:'Desempeño funcional bajo presión con oportunidades de mejora en la priorización rápida y la gestión del equipo en escenarios de alta demanda simultánea.' },
-    { min:0,  nivel:'En desarrollo', txt:'Puede mostrar dificultades para mantener la efectividad y el liderazgo del equipo durante incidentes críticos o periodos prolongados de alta presión.' },
+  directivo: [
+    { min:90, nivel:'Sobresaliente', txt:'Liderazgo directivo excepcional. Desarrolla el talento de su equipo, resuelve conflictos con maestría y genera equipos de alto desempeño de forma sostenida.' },
+    { min:75, nivel:'Alto',          txt:'Liderazgo sólido y consistente. Delega bien, brinda retroalimentación oportuna y gestiona conflictos con equidad. <em>Cumple el nivel esperado para el puesto.</em>' },
+    { min:60, nivel:'Adecuado',      txt:'Gestión directiva funcional con áreas de mejora en retroalimentación continua, motivación y desarrollo de los integrantes del equipo.' },
+    { min:0,  nivel:'En desarrollo', txt:'Requiere fortalecer competencias clave de liderazgo: delegación efectiva, retroalimentación constructiva y gestión del desempeño del equipo.' },
+  ],
+  cognitivo: [
+    { min:90, nivel:'Sobresaliente', txt:'Capacidad analítica y conceptual excepcional. Resuelve problemas complejos con métodos estructurados, integra información diversa y genera soluciones de alto impacto.' },
+    { min:75, nivel:'Alto',          txt:'Sólidas competencias cognitivas. Analiza con criterio, evalúa alternativas y construye visiones globales de situaciones complejas. <em>Cumple el nivel esperado para el puesto.</em>' },
+    { min:60, nivel:'Adecuado',      txt:'Capacidad cognitiva funcional con oportunidades de mejora en el análisis estructurado de causa raíz y la evaluación sistemática de alternativas.' },
+    { min:0,  nivel:'En desarrollo', txt:'Requiere fortalecer el pensamiento analítico, el razonamiento conceptual y la capacidad de integrar información compleja para la toma de decisiones.' },
   ],
   personal: [
-    { min:90, nivel:'Sobresaliente', txt:'Liderazgo de personas excepcional. Desarrolla talento, resuelve conflictos con maestría, da retroalimentación transformadora y mantiene equipos de alto desempeño. <em>Cumple el nivel esperado para el puesto.</em>' },
-    { min:75, nivel:'Alto',          txt:'Liderazgo sólido y consistente. Asigna bien, da retroalimentación oportuna y gestiona conflictos con equidad. Potencial claro de desarrollo hacia el nivel sobresaliente.' },
-    { min:60, nivel:'Adecuado',      txt:'Gestión de personas funcional con áreas de mejora en retroalimentación continua, resolución de conflictos y creación de planes de desarrollo individuales.' },
-    { min:0,  nivel:'En desarrollo', txt:'Requiere desarrollar competencias clave de liderazgo: delegación efectiva, retroalimentación constructiva y gestión del crecimiento del equipo.' },
-  ],
-  emocional: [
-    { min:90, nivel:'Sobresaliente', txt:'Inteligencia emocional sobresaliente. Gestiona sus emociones y las del entorno con maestría, generando un clima de confianza y resiliencia en el equipo.' },
-    { min:60, nivel:'Adecuado',      txt:'Manejo emocional adecuado para el puesto. Reconoce el impacto de sus emociones y mantiene el equilibrio interpersonal en la mayoría de situaciones. <em>Cumple el nivel esperado para el puesto.</em>' },
-    { min:0,  nivel:'En desarrollo', txt:'Oportunidad de desarrollar mayor autoconciencia emocional y técnicas de manejo de la tensión interpersonal en el contexto de liderazgo técnico.' },
+    { min:90, nivel:'Sobresaliente', txt:'Efectividad personal sobresaliente. Gestiona el estrés con maestría, tiene alta conciencia de sí mismo y se adapta con facilidad ante cualquier cambio organizacional.' },
+    { min:60, nivel:'Adecuado',      txt:'Efectividad personal adecuada para el puesto. Mantiene el equilibrio bajo presión, reconoce sus áreas de mejora y se adapta a los cambios con suficiencia. <em>Cumple el nivel esperado para el puesto.</em>' },
+    { min:0,  nivel:'En desarrollo', txt:'Oportunidad de fortalecer el autocontrol, la autoconciencia y la flexibilidad conductual ante situaciones de cambio o incertidumbre.' },
   ],
 };
 
@@ -673,32 +672,32 @@ const INTERP_TOTAL = [
   {
     min: 90, nivel: 'Sobresaliente', clase: 'nivel-exc',
     clasificacion: 'Altamente apto',
-    titulo: 'Perfil Sobresaliente — Supervisor IT',
-    txt: 'El candidato/a domina todas las competencias clave del puesto en niveles excepcionales. Destaca especialmente en Manejo de Personal e Inteligencia Emocional, generando alto impacto en equipos de TI. <strong>Candidato/a altamente recomendado/a para el puesto.</strong>',
+    titulo: 'Perfil Sobresaliente — Modelo Armstrong',
+    txt: 'El candidato/a demuestra dominio excepcional en todas las competencias conductuales evaluadas. Destaca en Competencias Directivas, Logro y Acción, y Efectividad Personal, generando alto impacto organizacional. <strong>Candidato/a altamente recomendado/a para el puesto.</strong>',
   },
   {
     min: 75, nivel: 'Alto', clase: 'nivel-ele',
     clasificacion: 'Apto',
     titulo: 'Perfil Sólido — Recomendado',
-    txt: 'Presenta competencias técnicas, conductuales y de liderazgo bien desarrolladas para asumir la supervisión IT. Se anticipa un desempeño efectivo en soporte, gestión de equipo y resolución de problemas. <strong>Candidato/a recomendado/a para el puesto.</strong>',
+    txt: 'Presenta competencias conductuales bien desarrolladas en las seis dimensiones Armstrong. Se anticipa un desempeño efectivo en liderazgo, resolución de situaciones complejas y orientación a resultados. <strong>Candidato/a recomendado/a para el puesto.</strong>',
   },
   {
     min: 60, nivel: 'Adecuado', clase: 'nivel-ade',
     clasificacion: 'Apto con reservas',
     titulo: 'Perfil con Potencial',
-    txt: 'Cumple los requisitos básicos del puesto con áreas específicas de mejora. Se sugiere un plan de desarrollo enfocado en las competencias con puntaje por debajo del nivel esperado antes o durante la incorporación. <strong>Apto/a con reservas; se recomienda acompañamiento inicial.</strong>',
+    txt: 'Cumple los requisitos conductuales básicos con áreas específicas de mejora. Se sugiere un plan de desarrollo focalizado en las dimensiones por debajo del nivel esperado antes o durante la incorporación. <strong>Apto/a con reservas; se recomienda acompañamiento inicial.</strong>',
   },
   {
     min: 40, nivel: 'En Desarrollo', clase: 'nivel-des',
     clasificacion: 'No apto por ahora',
     titulo: 'Perfil en Desarrollo',
-    txt: 'Varias competencias clave del puesto se encuentran en etapa de desarrollo. El puesto de Supervisor IT requiere competencias más consolidadas en liderazgo, resolución de problemas y trabajo bajo presión. <strong>Se recomienda un plan de desarrollo estructurado antes de considerar el cargo.</strong>',
+    txt: 'Varias competencias conductuales clave se encuentran en etapa de desarrollo. El puesto requiere competencias más consolidadas en liderazgo, influencia y efectividad personal. <strong>Se recomienda un plan de desarrollo estructurado antes de considerar el cargo.</strong>',
   },
   {
     min: 0, nivel: 'Bajo', clase: 'nivel-baj',
     clasificacion: 'No apto',
     titulo: 'Perfil No Apto para el Puesto',
-    txt: 'El perfil de competencias evaluado presenta brechas significativas en múltiples dimensiones críticas para el puesto de Supervisor IT. <strong>No se recomienda para este cargo en el estado actual de desarrollo de competencias.</strong>',
+    txt: 'El perfil conductual evaluado presenta brechas significativas en múltiples dimensiones del Modelo Armstrong. <strong>No se recomienda para este cargo en el estado actual de desarrollo de competencias.</strong>',
   },
 ];
 
@@ -876,7 +875,7 @@ function renderTabla(data) {
         <div class="td-name">${esc(r.n || 'Sin nombre')}</div>
         <div class="td-sub">${esc(r.e || '')}</div>
       </td>
-      <td>${esc(r.p || 'Supervisor IT')}</td>
+      <td>${esc(r.p || 'Evaluación de Competencias')}</td>
       <td style="white-space:nowrap">${formatFecha(r.ts)}</td>
       <td>
         <div class="score-inline">
@@ -900,8 +899,8 @@ function renderComparacion(data) {
   if (compareChart) { compareChart.destroy(); compareChart = null; }
 
   const COLORS = ['#7c3aed','#2563eb','#059669','#dc2626','#d97706','#0891b2','#7c3aed80'];
-  const dimLabels = ['Soporte Técnico','Atención al Cliente','Resolución Problemas','Trabajo Presión','Manejo Personal','Intelig. Emocional'];
-  const dimKeys   = ['soporte','atencion','resolucion','presion','personal','emocional'];
+  const dimLabels = ['Logro y Acción','Ayuda y Servicio','Impacto e Influencia','Comp. Directivas','Comp. Cognitivas','Efectividad Personal'];
+  const dimKeys   = ['logro','servicio','influencia','directivo','cognitivo','personal'];
 
   const datasets = data.slice(-6).map((r, i) => ({
     label: r.n || 'Candidato',
@@ -955,7 +954,7 @@ function verDetalle(token) {
     <!-- Radar + Scores -->
     <div class="detail-grid">
       <div class="chart-card">
-        <div class="chart-title">Perfil de Competencias — Supervisor IT</div>
+        <div class="chart-title">Perfil de Competencias — Modelo Armstrong</div>
         <div class="chart-canvas-wrap">
           <canvas id="radar-canvas"></canvas>
         </div>
@@ -986,7 +985,7 @@ function verDetalle(token) {
       <div class="candidate-info-title">Información del candidato</div>
       <div class="info-row"><span class="info-key">Nombre</span><span class="info-val">${esc(r.n || '—')}</span></div>
       <div class="info-row"><span class="info-key">Email</span><span class="info-val">${esc(r.e || '—')}</span></div>
-      <div class="info-row"><span class="info-key">Puesto</span><span class="info-val">${esc(r.p || 'Supervisor IT')}</span></div>
+      <div class="info-row"><span class="info-key">Puesto</span><span class="info-val">${esc(r.p || 'Evaluación de Competencias')}</span></div>
       <div class="info-row"><span class="info-key">Fecha</span><span class="info-val">${formatFechaLarga(r.ts)}</span></div>
       <div class="info-row"><span class="info-key">ID / Token</span><span class="info-val" style="font-family:monospace;font-size:12px">${esc(r.t)}</span></div>
     </div>
@@ -1091,7 +1090,7 @@ function eliminarCandidatoActual() {
 function generarLink() {
   const nombre = document.getElementById('link-nombre').value.trim();
   const email  = document.getElementById('link-email').value.trim();
-  const puesto = document.getElementById('link-puesto').value.trim() || 'Supervisor IT';
+  const puesto = document.getElementById('link-puesto').value.trim() || 'Evaluación de Competencias';
   const errEl  = document.getElementById('link-nombre-err');
 
   if (!nombre) { errEl.style.display = 'block'; return; }
@@ -1145,14 +1144,14 @@ function importarResultado() {
 
   // Recalcular scores del lado del evaluador (para garantizar integridad)
   const DIMS_MAP = {
-    soporte:    [0,1,2,3],
-    atencion:   [4,5],
-    resolucion: [6,7,8,9],
-    presion:    [10,11,12],
-    personal:   [13,14,15,16,17],
-    emocional:  [18,19],
+    logro:      [0,1,2,3],
+    servicio:   [4,5,6],
+    influencia: [7,8,9],
+    directivo:  [10,11,12,13],
+    cognitivo:  [14,15,16],
+    personal:   [17,18,19],
   };
-  const PESOS = { soporte:.20, atencion:.10, resolucion:.20, presion:.15, personal:.25, emocional:.10 };
+  const PESOS = { logro:.20, servicio:.15, influencia:.15, directivo:.25, cognitivo:.15, personal:.10 };
 
   const d = {};
   for (const [dim, indices] of Object.entries(DIMS_MAP)) {
@@ -1203,8 +1202,8 @@ function getInterpTotal(score) {
   return INTERP_TOTAL.find(x => score >= x.min);
 }
 
-function getInterpDim(score) {
-  return INTERP_DIM.impresion.find(x => score >= x.min);
+function getInterpDim(key, score) {
+  return (INTERP_DIM[key] || []).find(x => score >= x.min);
 }
 
 function getScoreColor(score) {
