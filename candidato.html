@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evaluación de Inteligencia Emocional — Supervisor IT</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#7c3aed;--accent-light:#ede9fe;--accent-dark:#5b21b6;
+  --bg:#f8fafc;--surface:#fff;--border:#e2e8f0;--border2:#cbd5e1;
+  --text:#1e293b;--muted:#64748b;--ok:#16a34a;--ok-bg:#dcfce7;
+  --warn-bg:#fffbeb;--warn-border:#fde68a;--warn-text:#92400e;
+  --err:#dc2626;--err-bg:#fff5f5;
+  --radius:12px;--font:'Segoe UI',system-ui,sans-serif
+}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  padding:40px 16px 80px
+}
+.screen{width:100%;max-width:740px;display:none}
+.screen.active{display:block}
+
+/* ── Header ── */
+.eval-header{text-align:center;margin-bottom:36px}
+.eval-logo{
+  width:56px;height:56px;background:var(--accent);border-radius:16px;
+  display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;
+  box-shadow:0 4px 14px rgba(124,58,237,.35)
+}
+.eval-logo svg{width:30px;height:30px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.eval-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px}
+.eval-subtitle{font-size:14px;color:var(--muted)}
+
+/* ── Card ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.card-title{font-size:18px;font-weight:600;margin-bottom:14px}
+.card-text{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:10px}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.info-item{background:var(--bg);border-radius:8px;padding:12px 16px;border:1px solid var(--border)}
+.info-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.info-val{font-size:14px;font-weight:600;color:var(--text)}
+
+/* ── Buttons ── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;
+  cursor:pointer;border:none;transition:all .15s;text-decoration:none;font-family:var(--font)
+}
+.btn-primary{background:var(--accent);color:#fff;width:100%;padding:14px 24px;font-size:15px}
+.btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(124,58,237,.3)}
+.btn-primary:active{transform:none}
+.btn-secondary{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--border);color:var(--text)}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:8px}
+
+/* ── Progress ── */
+.progress-wrap{padding:16px 20px;margin-bottom:16px}
+.progress-info{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);margin-bottom:10px}
+.progress-pct{font-weight:700;color:var(--accent)}
+.progress-bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a855f7);border-radius:4px;transition:width .35s ease}
+
+/* ── Section ── */
+.q-section{margin-bottom:28px}
+.section-header{
+  display:flex;align-items:center;gap:10px;padding:11px 16px;
+  background:var(--accent-light);border-radius:8px;margin-bottom:16px;
+  border-left:3px solid var(--accent)
+}
+.section-badge{
+  width:26px;height:26px;border-radius:6px;background:var(--accent);
+  color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0
+}
+.section-label{font-size:13px;font-weight:600;color:var(--accent-dark)}
+
+/* ── Question ── */
+.question{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);
+  padding:20px;margin-bottom:10px;transition:border-color .15s,background .15s
+}
+.question.answered{border-color:#c4b5fd}
+.question.error{border-color:var(--err);background:var(--err-bg)}
+.q-num{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.q-text{font-size:14px;color:var(--text);line-height:1.65;margin-bottom:18px;font-weight:500}
+
+.likert{display:flex;gap:6px}
+.likert-opt{flex:1;min-width:0}
+.likert-opt input{display:none}
+.likert-opt label{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:10px 4px;border-radius:8px;border:1.5px solid var(--border);
+  cursor:pointer;transition:all .15s;gap:5px;min-height:64px
+}
+.likert-opt label .l-num{font-size:17px;font-weight:700;color:var(--muted);line-height:1}
+.likert-opt label .l-txt{font-size:9.5px;color:var(--muted);text-align:center;line-height:1.3;max-width:54px}
+.likert-opt input:checked+label{
+  border-color:var(--accent);background:var(--accent-light);
+  box-shadow:0 0 0 3px rgba(124,58,237,.12)
+}
+.likert-opt input:checked+label .l-num{color:var(--accent)}
+.likert-opt input:checked+label .l-txt{color:var(--accent-dark);font-weight:600}
+.likert-opt label:hover:not(.sel){border-color:#a78bfa;background:#faf5ff}
+
+/* ── Submit ── */
+.submit-wrap{margin-top:28px;padding-top:20px;border-top:1px solid var(--border)}
+.err-msg{
+  display:none;background:var(--err-bg);border:1px solid #fca5a5;
+  color:var(--err);font-size:13px;padding:12px 16px;border-radius:8px;margin-bottom:14px
+}
+
+/* ── Done ── */
+.done-card{text-align:center;padding:44px 32px}
+.done-icon{
+  width:84px;height:84px;background:var(--ok-bg);border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;margin-bottom:24px;
+  box-shadow:0 4px 20px rgba(22,163,74,.2)
+}
+.done-icon svg{width:42px;height:42px;stroke:var(--ok);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.done-title{font-size:24px;font-weight:700;margin-bottom:12px}
+.done-text{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:28px}
+
+.code-box{
+  background:var(--bg);border:1.5px dashed var(--border2);border-radius:10px;
+  padding:18px;margin-bottom:20px;text-align:left
+}
+.code-box-label{
+  font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.7px;margin-bottom:10px;display:flex;align-items:center;gap:6px
+}
+.code-box-label svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.code-val{
+  font-family:'Courier New',monospace;font-size:11.5px;color:var(--text);
+  word-break:break-all;background:var(--surface);border:1px solid var(--border);
+  padding:12px;border-radius:8px;max-height:100px;overflow-y:auto;line-height:1.6;
+  user-select:all
+}
+.code-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.note-box{
+  background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:8px;
+  padding:12px 16px;font-size:13px;color:var(--warn-text);line-height:1.6
+}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);
+  background:#1e293b;color:#fff;padding:11px 22px;border-radius:10px;
+  font-size:13px;font-weight:500;opacity:0;transition:opacity .22s,transform .22s;
+  pointer-events:none;z-index:9999;white-space:nowrap;
+  box-shadow:0 4px 20px rgba(0,0,0,.2)
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Warn box ── */
+.warn-box{
+  background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:8px;
+  padding:12px 16px;font-size:13px;color:var(--warn-text);line-height:1.6
+}
+strong{font-weight:700}
+
+@media(max-width:520px){
+  body{padding:24px 12px 60px}
+  .card{padding:20px}
+  .info-grid{grid-template-columns:1fr}
+  .likert-opt label .l-txt{display:none}
+  .likert-opt label{min-height:52px;padding:8px 2px}
+  .likert-opt label .l-num{font-size:15px}
+  .done-card{padding:28px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SCREEN 1: INTRO                                                -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="s-intro" class="screen active">
+  <div class="eval-header">
+    <div class="eval-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+    </div>
+    <div class="eval-title">Evaluación de Inteligencia Emocional</div>
+    <div class="eval-subtitle" id="intro-subtitle">Proceso de selección — Supervisor IT</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Bienvenido/a, <span id="bienvenida-nombre" style="color:var(--accent)">candidato/a</span></div>
+    <p class="card-text">Has sido invitado/a a completar una evaluación psicométrica de <strong>Inteligencia Emocional (modelo Bar-On)</strong> como parte del proceso de selección para el puesto de <strong id="bienvenida-puesto">Supervisor IT</strong>.</p>
+    <p class="card-text">Esta evaluación mide diferentes componentes de tu inteligencia emocional en el contexto laboral. No hay respuestas correctas ni incorrectas; responde con sinceridad y con base en tu comportamiento habitual.</p>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">Total de preguntas</div>
+        <div class="info-val">20 preguntas</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Tiempo estimado</div>
+        <div class="info-val">10 – 15 minutos</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Formato de respuesta</div>
+        <div class="info-val">Escala del 1 al 5</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Requisito</div>
+        <div class="info-val">Todas las preguntas</div>
+      </div>
+    </div>
+
+    <div class="warn-box" style="margin-bottom:20px">
+      <strong>Importante:</strong> Tus respuestas son confidenciales. Los resultados serán revisados exclusivamente por el evaluador responsable de este proceso. Al finalizar recibirás un código que deberás compartir con dicho evaluador.
+    </div>
+
+    <button class="btn btn-primary" onclick="iniciarTest()">
+      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="9 18 15 12 9 6"/></svg>
+      Iniciar evaluación
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SCREEN 2: TEST                                                 -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="s-test" class="screen">
+  <div class="eval-header">
+    <div class="eval-title" style="font-size:18px">Evaluación de Inteligencia Emocional</div>
+    <div class="eval-subtitle" id="test-subtitle">Supervisor IT</div>
+  </div>
+
+  <div class="card progress-wrap" style="margin-bottom:16px">
+    <div class="progress-info">
+      <span>Progreso</span>
+      <span><span id="prog-count">0</span> / 20 respondidas <span class="progress-pct" id="prog-pct">(0%)</span></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div id="questions-container"></div>
+
+  <div class="submit-wrap">
+    <div class="err-msg" id="err-msg">
+      <strong>Atención:</strong> Por favor responde <span id="err-count">todas las preguntas</span> antes de enviar.
+    </div>
+    <button class="btn btn-primary" onclick="enviarTest()">
+      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="20 6 9 17 4 12"/></svg>
+      Enviar evaluación
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SCREEN 3: DONE                                                 -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="s-done" class="screen">
+  <div class="eval-header">
+    <div class="eval-title">Evaluación completada</div>
+  </div>
+
+  <div class="card done-card">
+    <div class="done-icon">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="done-title">¡Muchas gracias!</div>
+    <p class="done-text">
+      Tu evaluación de Inteligencia Emocional ha sido completada exitosamente.<br>
+      Para que el evaluador pueda revisar tus resultados, <strong>copia el código que aparece a continuación y envíalo al responsable del proceso</strong> (vía correo electrónico, WhatsApp u otro medio).
+    </p>
+
+    <div class="code-box">
+      <div class="code-box-label">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Código de resultados — Copiar y enviar al evaluador
+      </div>
+      <div class="code-val" id="result-code">Generando…</div>
+      <div class="code-actions">
+        <button class="btn btn-secondary btn-sm" onclick="copiarCodigo()">
+          <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copiar código
+        </button>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>Nota de privacidad:</strong> Este código contiene únicamente tus respuestas de manera cifrada. La interpretación y los resultados de la evaluación son confidenciales y solo estarán disponibles para el evaluador del proceso de selección.
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATOS DE LA EVALUACIÓN ──────────────────────────────────────────────────
+
+const PREGUNTAS = [
+  // A — Gestión de servicios tecnológicos (Soporte técnico)
+  { sec:'A', txt:'Cuando un usuario reporta un incidente crítico, establezco prioridades claras y coordino su resolución de manera estructurada y eficiente.' },
+  { sec:'A', txt:'Documento los incidentes técnicos y sus soluciones para construir una base de conocimiento que mejore la respuesta futura del equipo.' },
+  { sec:'A', txt:'Me aseguro de que los servicios de TI bajo mi responsabilidad cumplan con los niveles de servicio acordados (SLAs) con las áreas usuarias.' },
+  { sec:'A', txt:'Superviso activamente la calidad del soporte técnico que brinda mi equipo, identificando oportunidades de mejora en los procesos y herramientas.' },
+  // B — Orientación al usuario (Atención al cliente)
+  { sec:'B', txt:'Gestiono las expectativas de los usuarios internos de forma proactiva, comunicando tiempos de respuesta y actualizaciones de estado.' },
+  { sec:'B', txt:'Doy seguimiento a la satisfacción de los usuarios tras la resolución de incidentes, verificando que sus necesidades fueron atendidas correctamente.' },
+  // C — Análisis y toma de decisiones (Resolución de problemas)
+  { sec:'C', txt:'Analizo la causa raíz de los problemas técnicos recurrentes antes de implementar soluciones, evitando parches temporales.' },
+  { sec:'C', txt:'Cuando enfrento un problema técnico complejo, desgloso el problema en componentes manejables y abordo cada uno de forma sistemática.' },
+  { sec:'C', txt:'Evalúo múltiples alternativas de solución considerando costo, tiempo, riesgo e impacto antes de tomar una decisión.' },
+  { sec:'C', txt:'Aplico métodos estructurados (análisis de causa raíz, 5 Porqués, árbol de fallas) para resolver problemas técnicos o de gestión del área.' },
+  // D — Respuesta ante la presión (Trabajo bajo presión)
+  { sec:'D', txt:'Durante incidentes mayores o cortes de servicio, mantengo la claridad mental y tomo decisiones efectivas sin perder el control de la situación.' },
+  { sec:'D', txt:'Cuando múltiples urgencias se presentan simultáneamente, establezco prioridades con criterio y comunico el plan de acción a mi equipo.' },
+  { sec:'D', txt:'Después de periodos de alta carga de trabajo, recupero mi rendimiento y el de mi equipo de manera rápida y efectiva.' },
+  // E — Liderazgo y desarrollo de equipo (Manejo de personal)
+  { sec:'E', txt:'Asigno tareas y proyectos a los miembros del equipo considerando sus habilidades, carga de trabajo y oportunidades de desarrollo.' },
+  { sec:'E', txt:'Doy retroalimentación constructiva y oportuna a mi equipo, tanto cuando su desempeño no cumple las expectativas como cuando destacan.' },
+  { sec:'E', txt:'Resuelvo conflictos entre miembros del equipo de forma justa, escuchando todas las partes y buscando soluciones que fortalezcan la cohesión.' },
+  { sec:'E', txt:'Identifico las necesidades de capacitación de mi equipo y creo activamente oportunidades de crecimiento profesional para cada integrante.' },
+  { sec:'E', txt:'En momentos de alta presión o cambio organizacional, mantengo al equipo motivado y enfocado en los objetivos sin descuidar el bienestar.' },
+  // F — Habilidades emocionales e interpersonales (Inteligencia emocional)
+  { sec:'F', txt:'Reconozco el impacto que mis emociones y actitudes tienen en el clima del equipo y ajusto mi comportamiento cuando la situación lo requiere.' },
+  { sec:'F', txt:'Manejo con madurez y equilibrio las críticas, los conflictos y las situaciones de alta tensión en el entorno laboral.' },
+];
+
+const SECCIONES = {
+  A: 'Gestión de servicios tecnológicos',
+  B: 'Orientación al usuario',
+  C: 'Análisis y toma de decisiones',
+  D: 'Respuesta ante la presión',
+  E: 'Liderazgo y desarrollo de equipo',
+  F: 'Habilidades emocionales e interpersonales',
+};
+
+const ESCALA = [
+  { val:1, txt:'Nunca' },
+  { val:2, txt:'Pocas veces' },
+  { val:3, txt:'A veces' },
+  { val:4, txt:'Frecuente' },
+  { val:5, txt:'Siempre' },
+];
+
+const DIMS_MAP = {
+  soporte:   [0,1,2,3],
+  atencion:  [4,5],
+  resolucion:[6,7,8,9],
+  presion:   [10,11,12],
+  personal:  [13,14,15,16,17],
+  emocional: [18,19],
+};
+
+const PESOS = {
+  soporte:    .20,
+  atencion:   .10,
+  resolucion: .20,
+  presion:    .15,
+  personal:   .25,
+  emocional:  .10,
+};
+
+// ─── PARÁMETROS DE URL ───────────────────────────────────────────────────────
+
+const QS = new URLSearchParams(location.search);
+let cNombre = '', cEmail = '', cToken = '', cPuesto = 'Supervisor IT';
+
+try { cNombre = QS.get('n') ? atob(decodeURIComponent(QS.get('n'))) : ''; } catch(e){}
+try { cEmail  = QS.get('e') ? atob(decodeURIComponent(QS.get('e'))) : ''; } catch(e){}
+cToken  = QS.get('t') || ('LIBRE_' + Date.now());
+try { cPuesto = QS.get('p') ? decodeURIComponent(QS.get('p')) : 'Supervisor IT'; } catch(e){}
+
+document.getElementById('bienvenida-nombre').textContent = cNombre || 'candidato/a';
+document.getElementById('bienvenida-puesto').textContent = cPuesto;
+document.getElementById('intro-subtitle').textContent    = 'Proceso de selección — ' + cPuesto;
+document.getElementById('test-subtitle').textContent     = cPuesto;
+
+// ─── CONSTRUIR PREGUNTAS ──────────────────────────────────────────────────────
+
+function buildQuestions() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  let currentSec = null;
+  let secDiv = null;
+
+  PREGUNTAS.forEach((q, idx) => {
+    if (q.sec !== currentSec) {
+      currentSec = q.sec;
+      secDiv = document.createElement('div');
+      secDiv.className = 'q-section';
+      secDiv.innerHTML = `
+        <div class="section-header">
+          <span class="section-badge">${q.sec}</span>
+          <span class="section-label">${SECCIONES[q.sec]}</span>
+        </div>`;
+      container.appendChild(secDiv);
+    }
+
+    const likertHtml = ESCALA.map(e => `
+      <div class="likert-opt">
+        <input type="radio" name="q${idx}" id="q${idx}_${e.val}" value="${e.val}">
+        <label for="q${idx}_${e.val}">
+          <span class="l-num">${e.val}</span>
+          <span class="l-txt">${e.txt}</span>
+        </label>
+      </div>`).join('');
+
+    const qDiv = document.createElement('div');
+    qDiv.className = 'question';
+    qDiv.id = `qbox${idx}`;
+    qDiv.innerHTML = `
+      <div class="q-num">Pregunta ${idx + 1} de 20</div>
+      <div class="q-text">${q.txt}</div>
+      <div class="likert">${likertHtml}</div>`;
+
+    secDiv.appendChild(qDiv);
+  });
+
+  // Progress tracking
+  document.querySelectorAll('input[type=radio]').forEach(r => {
+    r.addEventListener('change', () => {
+      document.getElementById(`qbox${r.name.slice(1)}`).classList.add('answered');
+      document.getElementById(`qbox${r.name.slice(1)}`).classList.remove('error');
+      updateProgress();
+    });
+  });
+}
+
+function updateProgress() {
+  let answered = 0;
+  for (let i = 0; i < 20; i++) {
+    if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+  }
+  const pct = Math.round(answered / 20 * 100);
+  document.getElementById('prog-count').textContent = answered;
+  document.getElementById('prog-pct').textContent   = `(${pct}%)`;
+  document.getElementById('prog-fill').style.width  = pct + '%';
+}
+
+// ─── NAVEGACIÓN ───────────────────────────────────────────────────────────────
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function iniciarTest() {
+  buildQuestions();
+  showScreen('s-test');
+}
+
+// ─── ENVIAR EVALUACIÓN ────────────────────────────────────────────────────────
+
+function enviarTest() {
+  const respuestas = [];
+  const faltantes = [];
+
+  for (let i = 0; i < 20; i++) {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if (!sel) faltantes.push(i);
+    else respuestas.push(parseInt(sel.value));
+  }
+
+  // Marcar faltantes
+  for (let i = 0; i < 20; i++) {
+    document.getElementById(`qbox${i}`).classList.toggle('error', faltantes.includes(i));
+  }
+
+  if (faltantes.length) {
+    const errEl = document.getElementById('err-msg');
+    document.getElementById('err-count').textContent =
+      faltantes.length === 1 ? '1 pregunta pendiente' : `${faltantes.length} preguntas pendientes`;
+    errEl.style.display = 'block';
+    document.getElementById(`qbox${faltantes[0]}`).scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  document.getElementById('err-msg').style.display = 'none';
+
+  // Calcular puntajes por dimensión
+  const dimScores = {};
+  for (const [dim, indices] of Object.entries(DIMS_MAP)) {
+    const vals = indices.map(i => respuestas[i]);
+    const max  = vals.length * 5;
+    dimScores[dim] = Math.round(vals.reduce((a, b) => a + b, 0) / max * 100);
+  }
+
+  // Puntaje total ponderado (sin Impresión)
+  let total = 0;
+  for (const [dim, peso] of Object.entries(PESOS)) {
+    total += dimScores[dim] * peso;
+  }
+  total = Math.round(total);
+
+  const resultado = {
+    n:  cNombre,
+    e:  cEmail,
+    p:  cPuesto,
+    t:  cToken,
+    ts: new Date().toISOString(),
+    r:  respuestas,
+    d:  dimScores,
+    total,
+  };
+
+  // Generar código base64
+  const code = btoa(unescape(encodeURIComponent(JSON.stringify(resultado))));
+  document.getElementById('result-code').textContent = code;
+  showScreen('s-done');
+}
+
+// ─── COPIAR CÓDIGO ────────────────────────────────────────────────────────────
+
+function copiarCodigo() {
+  const code = document.getElementById('result-code').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(code)
+      .then(() => showToast('Código copiado al portapapeles'))
+      .catch(() => seleccionarCodigo());
+  } else {
+    seleccionarCodigo();
+  }
+}
+
+function seleccionarCodigo() {
+  const el = document.getElementById('result-code');
+  const sel = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  sel.removeAllRanges();
+  sel.addRange(range);
+  showToast('Selecciona el texto y cópialo (Ctrl+C)');
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
