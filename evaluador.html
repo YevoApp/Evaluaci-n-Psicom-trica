@@ -701,13 +701,15 @@ function cargarResultados() {
 // ─── LISTENER FIRESTORE ───────────────────────────────────────────────────────
 
 function iniciarListener() {
-  if (_unsubscribe || !db) return;
+  if (_unsubscribe) { console.log('[Firestore] Listener ya activo'); return; }
+  if (!db)          { console.warn('[Firestore] db es null, listener no iniciado'); return; }
+  console.log('[Firestore] Iniciando listener...');
   _unsubscribe = db.collection('resultados').onSnapshot(
     snapshot => {
       _resultadosFirestore = snapshot.docs.map(d => d.data());
+      console.log('[Firestore] Snapshot recibido, docs:', _resultadosFirestore.length);
       if (haySession()) {
         renderDashboard();
-        // Solo mostrar toast si ya había cargado antes (es un cambio nuevo)
         if (_resultadosFirestore.length > 0) {
           const ultimoTs = Math.max(..._resultadosFirestore.map(r => new Date(r.ts||0).getTime()));
           const ahora = Date.now();
@@ -715,7 +717,7 @@ function iniciarListener() {
         }
       }
     },
-    err => console.error('Firestore error:', err)
+    err => console.error('[Firestore] Error en listener:', err.code, err.message)
   );
 }
 
